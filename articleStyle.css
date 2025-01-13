@@ -1,0 +1,19 @@
+.articleText p {
+  all: unset;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.articleText q {
+  font-style: italic;
+}
+
+.articleText q::before {
+  all: unset;
+  content: "„";
+}
+
+.articleText q::after {
+  all: unset;
+  content: "“";
+}
