@@ -1035,159 +1035,159 @@ li {
 const supportedTypes = ['text', 'password', 'number'];
 
 supportedTypes.forEach(inputType => {
-    const allInputs = document.querySelectorAll(`input[type="${inputType}"]`);
+  const allInputs = document.querySelectorAll(`input[type="${inputType}"]`);
 
-    allInputs.forEach(textInput => {
-        // Check if the textInput is not inside a code element
-        if (!textInput.closest('code')) {
-            const mdpLabel = textInput.getAttribute('mdp-label');
-            const mdpWidth = textInput.getAttribute('mdp-width');
-            const id = textInput.getAttribute('id');
-            const attributes = [];
+  allInputs.forEach(textInput => {
+    // Check if the textInput is not inside a code element
+    if (!textInput.closest('code')) {
+      const mdpLabel = textInput.getAttribute('mdp-label');
+      const mdpWidth = textInput.getAttribute('mdp-width');
+      const id = textInput.getAttribute('id');
+      const attributes = [];
 
-            // Get all other attributes except type and mdp-label
-            for (const attribute of textInput.attributes) {
-                if (attribute.name !== 'type' && attribute.name !== 'mdp-label') {
-                    attributes.push(attribute.name + '="' + attribute.value + '"');
-                }
-            }
-
-            const joinedAttributes = attributes.join(' ');
-
-            const newInputGroup = document.createElement('div');
-            newInputGroup.classList.add('input-group');
-
-            const newInput = document.createElement('input');
-            newInput.type = textInput.type; // Preserve original input type
-            newInput.classList.add('input');
-            newInput.required = true; // Assuming all inputs are required
-            newInput.setAttribute('aria-label', mdpLabel); // Add aria-label for accessibility
-            newInput.id = id
-            newInput.style.maxWidth = `calc(${mdpWidth} - 34px)`
-            newInputGroup.width = `calc(${mdpWidth} - 34px)`
-            if (joinedAttributes.length > 0) {
-                newInput.setAttribute('attributes', joinedAttributes); // Not recommended for modern browsers
-            }
-
-            const newLabel = document.createElement('label');
-            newLabel.classList.add('user-label');
-            newLabel.textContent = mdpLabel;
-
-            newInputGroup.appendChild(newInput);
-            newInputGroup.appendChild(newLabel);
-
-            textInput.parentNode.replaceChild(newInputGroup, textInput);
+      // Get all other attributes except type and mdp-label
+      for (const attribute of textInput.attributes) {
+        if (attribute.name !== 'type' && attribute.name !== 'mdp-label') {
+          attributes.push(attribute.name + '="' + attribute.value + '"');
         }
-    });
+      }
+
+      const joinedAttributes = attributes.join(' ');
+
+      const newInputGroup = document.createElement('div');
+      newInputGroup.classList.add('input-group');
+
+      const newInput = document.createElement('input');
+      newInput.type = textInput.type; // Preserve original input type
+      newInput.classList.add('input');
+      newInput.required = true; // Assuming all inputs are required
+      newInput.setAttribute('aria-label', mdpLabel); // Add aria-label for accessibility
+      newInput.id = id
+      newInput.style.maxWidth = `calc(${mdpWidth} - 34px)`
+      newInputGroup.width = `calc(${mdpWidth} - 34px)`
+      if (joinedAttributes.length > 0) {
+        newInput.setAttribute('attributes', joinedAttributes); // Not recommended for modern browsers
+      }
+
+      const newLabel = document.createElement('label');
+      newLabel.classList.add('user-label');
+      newLabel.textContent = mdpLabel;
+
+      newInputGroup.appendChild(newInput);
+      newInputGroup.appendChild(newLabel);
+
+      textInput.parentNode.replaceChild(newInputGroup, textInput);
+    }
+  });
 });
 
 const numberInputs = document.querySelectorAll('input[type="number"]');
 
 numberInputs.forEach(numberInput => {
-    numberInput.addEventListener('keypress', function (event) {
-        const allowedChars = new RegExp('^[0-9.]+$'); // Allow digits and decimal point
-        const key = String.fromCharCode(event.charCode); // Get the pressed key
+  numberInput.addEventListener('keypress', function (event) {
+    const allowedChars = new RegExp('^[0-9.]+$'); // Allow digits and decimal point
+    const key = String.fromCharCode(event.charCode); // Get the pressed key
 
-        if (!allowedChars.test(key)) {
-            event.preventDefault(); // Prevent invalid character from being entered
-        }
-    });
+    if (!allowedChars.test(key)) {
+      event.preventDefault(); // Prevent invalid character from being entered
+    }
+  });
 });
 
 function trimBlankLines(text) {
-    // Remove leading and trailing blank lines using regular expressions
-    return text.replace(/^\s+|\s+$/g, '');
+  // Remove leading and trailing blank lines using regular expressions
+  return text.replace(/^\s+|\s+$/g, '');
 }
 
 function trimMinimalWhitespace(text) {
-    const lines = text.split('\n');
-    const minIndent = Math.min(...lines.filter(line => line.trim() !== '').map(line => line.match(/^\s*/)[0].length));
+  const lines = text.split('\n');
+  const minIndent = Math.min(...lines.filter(line => line.trim() !== '').map(line => line.match(/^\s*/)[0].length));
 
-    return lines.map(line => line.replace(new RegExp(`^\\s{${minIndent}}`), '')).join('\n');
+  return lines.map(line => line.replace(new RegExp(`^\\s{${minIndent}}`), '')).join('\n');
 }
 
 function cycleCodeBlocks() {
-    const codeBlocks = document.querySelectorAll('code');
+  const codeBlocks = document.querySelectorAll('code');
 
-    codeBlocks.forEach(codeBlock => {
-        const language = codeBlock.getAttribute("mdp-language")
-        codeBlock.classList.add(`language-${language}`)
-        codeBlock.removeAttribute('mdp-language');
-        const codeText = codeBlock.innerHTML;
-        const codeBlockElement = codeBlock;
-        codeBlockElement.innerHTML = `<pre class="language-html"></pre>`;
+  codeBlocks.forEach(codeBlock => {
+    const language = codeBlock.getAttribute("mdp-language")
+    codeBlock.classList.add(`language-${language}`)
+    codeBlock.removeAttribute('mdp-language');
+    const codeText = codeBlock.innerHTML;
+    const codeBlockElement = codeBlock;
+    codeBlockElement.innerHTML = `<pre class="language-html"></pre>`;
 
-        codeBlockElement.children[0].textContent = `${trimBlankLines(trimMinimalWhitespace(codeText))}`;
-    });
+    codeBlockElement.children[0].textContent = `${trimBlankLines(trimMinimalWhitespace(codeText))}`;
+  });
 }
 
 function setImgDimensions() {
-    const images = document.querySelectorAll('img');
+  const images = document.querySelectorAll('img');
 
-    images.forEach(img => {
-        const mdpWidth = img.getAttribute('mdp-width');
-        const mdpHeight = img.getAttribute('mdp-height');
+  images.forEach(img => {
+    const mdpWidth = img.getAttribute('mdp-width');
+    const mdpHeight = img.getAttribute('mdp-height');
 
-        img.style.width = mdpWidth;
-        img.style.height = mdpHeight;
+    img.style.width = mdpWidth;
+    img.style.height = mdpHeight;
 
-        img.removeAttribute('mdp-width')
-        img.removeAttribute('mdp-height')
-    });
-    const divs = document.querySelectorAll('div');
+    img.removeAttribute('mdp-width')
+    img.removeAttribute('mdp-height')
+  });
+  const divs = document.querySelectorAll('div');
 
-    divs.forEach(div => {
-        const mdpWidth = div.getAttribute('mdp-width');
-        const mdpHeight = div.getAttribute('mdp-height');
+  divs.forEach(div => {
+    const mdpWidth = div.getAttribute('mdp-width');
+    const mdpHeight = div.getAttribute('mdp-height');
 
-        div.style.width = mdpWidth;
-        div.style.height = mdpHeight;
+    div.style.width = mdpWidth;
+    div.style.height = mdpHeight;
 
-        div.removeAttribute('mdp-width')
-        div.removeAttribute('mdp-height')
-    });
+    div.removeAttribute('mdp-width')
+    div.removeAttribute('mdp-height')
+  });
 }
 
 function convertMdpDropdown() {
-    const mdpDropdowns = document.querySelectorAll('mdp-dropdown');
+  const mdpDropdowns = document.querySelectorAll('mdp-dropdown');
 
-    mdpDropdowns.forEach(mdpDropdown => {
-        if (!mdpDropdown.closest('code')) {
-            const mdpWidth = mdpDropdown.getAttribute('mdp-width');
-            const div = document.createElement('div');
-            div.style.visibility = "none";
-            div.classList.add('mdp-dropdown');
+  mdpDropdowns.forEach(mdpDropdown => {
+    if (!mdpDropdown.closest('code')) {
+      const mdpWidth = mdpDropdown.getAttribute('mdp-width');
+      const div = document.createElement('div');
+      div.style.visibility = "none";
+      div.classList.add('mdp-dropdown');
 
-            const select = document.createElement('select');
-            select.innerHTML = mdpDropdown.innerHTML;
+      const select = document.createElement('select');
+      select.innerHTML = mdpDropdown.innerHTML;
 
-            // Transfer other attributes
-            Array.from(mdpDropdown.attributes).forEach(attr => {
-                if (attr.name !== 'mdp-width') {
-                    select.setAttribute(attr.name, attr.value);
-                }
-            });
-
-            div.appendChild(select);
-
-            mdpDropdown.parentNode.replaceChild(div, mdpDropdown);
-
-            setTimeout(setWidth => {
-                div.style.width = mdpWidth;
-                div.style.visibility = "visible";
-            }, 0)
+      // Transfer other attributes
+      Array.from(mdpDropdown.attributes).forEach(attr => {
+        if (attr.name !== 'mdp-width') {
+          select.setAttribute(attr.name, attr.value);
         }
-    });
+      });
+
+      div.appendChild(select);
+
+      mdpDropdown.parentNode.replaceChild(div, mdpDropdown);
+
+      setTimeout(setWidth => {
+        div.style.width = mdpWidth;
+        div.style.visibility = "visible";
+      }, 0)
+    }
+  });
 }
 
 
 function setBackgroundColorByAttribute() {
-    const elements = document.querySelectorAll('[mdp-bgColour]');
+  const elements = document.querySelectorAll('[mdp-bgColour]');
 
-    elements.forEach(element => {
-        const bgColor = element.getAttribute('mdp-bgColour');
-        element.style.backgroundColor = bgColor;
-    });
+  elements.forEach(element => {
+    const bgColor = element.getAttribute('mdp-bgColour');
+    element.style.backgroundColor = bgColor;
+  });
 }
 setBackgroundColorByAttribute()
 convertMdpDropdown();
@@ -1200,76 +1200,76 @@ var x, i, j, l, ll, selElmnt, a, b, c;
 x = document.getElementsByClassName("mdp-dropdown");
 l = x.length;
 for (i = 0; i < l; i++) {
-    selElmnt = x[i].getElementsByTagName("select")[0];
-    ll = selElmnt.length;
-    /* For each element, create a new DIV that will act as the selected item: */
-    a = document.createElement("DIV");
-    a.setAttribute("class", "select-selected");
-    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-    x[i].appendChild(a);
-    /* For each element, create a new DIV that will contain the option list: */
-    b = document.createElement("DIV");
-    b.setAttribute("class", "select-items select-hide");
-    for (j = 1; j < ll; j++) {
-        /* For each option in the original select element,
-        create a new DIV that will act as an option item: */
-        c = document.createElement("DIV");
-        c.innerHTML = selElmnt.options[j].innerHTML;
-        c.addEventListener("click", function (e) {
-            /* When an item is clicked, update the original select box,
-            and the selected item: */
-            var y, i, k, s, h, sl, yl;
-            s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-            sl = s.length;
-            h = this.parentNode.previousSibling;
-            for (i = 0; i < sl; i++) {
-                if (s.options[i].innerHTML == this.innerHTML) {
-                    s.selectedIndex = i;
-                    h.innerHTML = this.innerHTML;
-                    y = this.parentNode.getElementsByClassName("same-as-selected");
-                    yl = y.length;
-                    for (k = 0; k < yl; k++) {
-                        y[k].removeAttribute("class");
-                    }
-                    this.setAttribute("class", "same-as-selected");
-                    break;
-                }
-            }
-            h.click();
-        });
-        b.appendChild(c);
-    }
-    x[i].appendChild(b);
-    a.addEventListener("click", function (e) {
-        /* When the select box is clicked, close any other select boxes,
-        and open/close the current select box: */
-        e.stopPropagation();
-        closeAllSelect(this);
-        this.nextSibling.classList.toggle("select-hide");
-        this.classList.toggle("select-arrow-active");
+  selElmnt = x[i].getElementsByTagName("select")[0];
+  ll = selElmnt.length;
+  /* For each element, create a new DIV that will act as the selected item: */
+  a = document.createElement("DIV");
+  a.setAttribute("class", "select-selected");
+  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+  x[i].appendChild(a);
+  /* For each element, create a new DIV that will contain the option list: */
+  b = document.createElement("DIV");
+  b.setAttribute("class", "select-items select-hide");
+  for (j = 1; j < ll; j++) {
+    /* For each option in the original select element,
+    create a new DIV that will act as an option item: */
+    c = document.createElement("DIV");
+    c.innerHTML = selElmnt.options[j].innerHTML;
+    c.addEventListener("click", function (e) {
+      /* When an item is clicked, update the original select box,
+      and the selected item: */
+      var y, i, k, s, h, sl, yl;
+      s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+      sl = s.length;
+      h = this.parentNode.previousSibling;
+      for (i = 0; i < sl; i++) {
+        if (s.options[i].innerHTML == this.innerHTML) {
+          s.selectedIndex = i;
+          h.innerHTML = this.innerHTML;
+          y = this.parentNode.getElementsByClassName("same-as-selected");
+          yl = y.length;
+          for (k = 0; k < yl; k++) {
+            y[k].removeAttribute("class");
+          }
+          this.setAttribute("class", "same-as-selected");
+          break;
+        }
+      }
+      h.click();
     });
+    b.appendChild(c);
+  }
+  x[i].appendChild(b);
+  a.addEventListener("click", function (e) {
+    /* When the select box is clicked, close any other select boxes,
+    and open/close the current select box: */
+    e.stopPropagation();
+    closeAllSelect(this);
+    this.nextSibling.classList.toggle("select-hide");
+    this.classList.toggle("select-arrow-active");
+  });
 }
 
 function closeAllSelect(elmnt) {
-    /* A function that will close all select boxes in the document,
-    except the current select box: */
-    var x, y, i, xl, yl, arrNo = [];
-    x = document.getElementsByClassName("select-items");
-    y = document.getElementsByClassName("select-selected");
-    xl = x.length;
-    yl = y.length;
-    for (i = 0; i < yl; i++) {
-        if (elmnt == y[i]) {
-            arrNo.push(i)
-        } else {
-            y[i].classList.remove("select-arrow-active");
-        }
+  /* A function that will close all select boxes in the document,
+  except the current select box: */
+  var x, y, i, xl, yl, arrNo = [];
+  x = document.getElementsByClassName("select-items");
+  y = document.getElementsByClassName("select-selected");
+  xl = x.length;
+  yl = y.length;
+  for (i = 0; i < yl; i++) {
+    if (elmnt == y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
     }
-    for (i = 0; i < xl; i++) {
-        if (arrNo.indexOf(i)) {
-            x[i].classList.add("select-hide");
-        }
+  }
+  for (i = 0; i < xl; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
     }
+  }
 }
 
 /* If the user clicks anywhere outside the select box,
@@ -1277,187 +1277,187 @@ then close all select boxes: */
 document.addEventListener("click", closeAllSelect);
 
 function setMarginFromMdpMargin() {
-    const elements = document.querySelectorAll('[mdp-margin]');
+  const elements = document.querySelectorAll('[mdp-margin]');
 
-    elements.forEach(element => {
-        const mdpMarginValue = element.getAttribute('mdp-margin');
-        element.style.margin = mdpMarginValue;
-    });
+  elements.forEach(element => {
+    const mdpMarginValue = element.getAttribute('mdp-margin');
+    element.style.margin = mdpMarginValue;
+  });
 }
 
 function setPaddingFromMdpPadding() {
-    const elements = document.querySelectorAll('[mdp-padding]');
+  const elements = document.querySelectorAll('[mdp-padding]');
 
-    elements.forEach(element => {
-        const mdpPaddingValue = element.getAttribute('mdp-padding');
-        element.style.padding = mdpPaddingValue;
-    });
+  elements.forEach(element => {
+    const mdpPaddingValue = element.getAttribute('mdp-padding');
+    element.style.padding = mdpPaddingValue;
+  });
 }
 
 setMarginFromMdpMargin()
 setPaddingFromMdpPadding()
 
 if (document.querySelector("body").hasAttribute("mdp-show-loading-screen") === true) {
-    const loadingScreen = document.createElement('div');
-    loadingScreen.classList.add("mdp-loadingScreen95891698")
-    loadingScreen.innerHTML = "Loading...";
-    document.body.appendChild(loadingScreen);
-    window.onload = function () {
-        loadingScreen.style.opacity = 0;
-        setTimeout(() => {
-            loadingScreen.style.display = "none";
-        }, 250);
-    };
+  const loadingScreen = document.createElement('div');
+  loadingScreen.classList.add("mdp-loadingScreen95891698")
+  loadingScreen.innerHTML = "Loading...";
+  document.body.appendChild(loadingScreen);
+  window.onload = function () {
+    loadingScreen.style.opacity = 0;
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+    }, 250);
+  };
 }
 
 
 function iconAppearMenu() {
-    var x = document.querySelector("[mdp-topnav]");
-    if (x.hasAttribute("mdp-topnav-menu-closed") === true) {
-        x.setAttribute("mdp-topnav-menu-open", "")
-        x.removeAttribute("mdp-topnav-menu-closed", "")
-    } else {
-        x.setAttribute("mdp-topnav-menu-closed", "")
-        x.removeAttribute("mdp-topnav-menu-open", "")
-    }
+  var x = document.querySelector("[mdp-topnav]");
+  if (x.hasAttribute("mdp-topnav-menu-closed") === true) {
+    x.setAttribute("mdp-topnav-menu-open", "")
+    x.removeAttribute("mdp-topnav-menu-closed", "")
+  } else {
+    x.setAttribute("mdp-topnav-menu-closed", "")
+    x.removeAttribute("mdp-topnav-menu-open", "")
+  }
 }
 
 function convertMdpNavbarToDiv() {
-    const mdpNavbars = document.querySelectorAll('mdp-navbar');
-    if (mdpNavbars.length > 1) {
-        console.error('Only one <mdp-navbar> permited per page');
-        const firstNavbar = mdpNavbars[0];
+  const mdpNavbars = document.querySelectorAll('mdp-navbar');
+  if (mdpNavbars.length > 1) {
+    console.error('Only one <mdp-navbar> permited per page');
+    const firstNavbar = mdpNavbars[0];
 
-        // Hide all other mdp-navbar elements
-        for (let i = 1; i < mdpNavbars.length; i++) {
-            mdpNavbars[i].style.display = 'none';
-        }
+    // Hide all other mdp-navbar elements
+    for (let i = 1; i < mdpNavbars.length; i++) {
+      mdpNavbars[i].style.display = 'none';
     }
+  }
 
-    // Rest of the conversion logic...
+  // Rest of the conversion logic...
 
-    const mdpNavbar = document.getElementById('myTopnav');
-    if (!mdpNavbar) {
-        console.error('Element with ID "myTopnav" not found.');
-        return;
-    }
+  const mdpNavbar = document.getElementById('myTopnav');
+  if (!mdpNavbar) {
+    console.error('Element with ID "myTopnav" not found.');
+    return;
+  }
 
-    const divElement = document.createElement('div');
-    divElement.setAttribute('mdp-topnav', '');
-    divElement.setAttribute('mdp-topnav-menu-closed', '');
-    divElement.id = 'myTopnav';
+  const divElement = document.createElement('div');
+  divElement.setAttribute('mdp-topnav', '');
+  divElement.setAttribute('mdp-topnav-menu-closed', '');
+  divElement.id = 'myTopnav';
 
-    const mdpItems = mdpNavbar.querySelectorAll('mdp-item');
-    mdpItems.forEach(mdpItem => {
-        const href = mdpItem.getAttribute('mdp-destination');
-        const text = mdpItem.textContent;
-        const anchorElement = document.createElement('a');
-        anchorElement.href = href;
-        anchorElement.textContent = text;
-        divElement.appendChild(anchorElement);
-    });
+  const mdpItems = mdpNavbar.querySelectorAll('mdp-item');
+  mdpItems.forEach(mdpItem => {
+    const href = mdpItem.getAttribute('mdp-destination');
+    const text = mdpItem.textContent;
+    const anchorElement = document.createElement('a');
+    anchorElement.href = href;
+    anchorElement.textContent = text;
+    divElement.appendChild(anchorElement);
+  });
 
-    const iconAnchor = document.createElement('a');
-    iconAnchor.href = 'javascript:void(0);';
-    iconAnchor.classList.add('icon');
-    iconAnchor.setAttribute('onclick', 'iconAppearMenu()');
-    const iconSpan = document.createElement('span');
-    iconSpan.classList.add('material-symbols-rounded');
-    iconSpan.textContent = ' menu ';
-    iconAnchor.appendChild(iconSpan);
-    divElement.appendChild(iconAnchor);
+  const iconAnchor = document.createElement('a');
+  iconAnchor.href = 'javascript:void(0);';
+  iconAnchor.classList.add('icon');
+  iconAnchor.setAttribute('onclick', 'iconAppearMenu()');
+  const iconSpan = document.createElement('span');
+  iconSpan.classList.add('material-symbols-rounded');
+  iconSpan.textContent = ' menu ';
+  iconAnchor.appendChild(iconSpan);
+  divElement.appendChild(iconAnchor);
 
-    mdpNavbar.parentNode.replaceChild(divElement, mdpNavbar);
+  mdpNavbar.parentNode.replaceChild(divElement, mdpNavbar);
 }
 
 convertMdpNavbarToDiv();
 
 function migrateMdpWidthToStyle() {
-    const elementsWithMdpWidth = document.querySelectorAll('[mdp-width]');
+  const elementsWithMdpWidth = document.querySelectorAll('[mdp-width]');
 
-    elementsWithMdpWidth.forEach(element => {
-        const widthValue = element.getAttribute('mdp-width');
-        element.style.width = widthValue;
-        element.removeAttribute('mdp-width');
-    });
+  elementsWithMdpWidth.forEach(element => {
+    const widthValue = element.getAttribute('mdp-width');
+    element.style.width = widthValue;
+    element.removeAttribute('mdp-width');
+  });
 }
 
 migrateMdpWidthToStyle();
 
 function checkDevice() {
-    const ua = navigator.userAgent;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const ua = navigator.userAgent;
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
 
-    if (isMobile) {
-        return true;
-    } else {
-        return false;
-    }
+  if (isMobile) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function setMouse() {
-    if (document.querySelector("body").hasAttribute("mdp-custom-cursor") === true) {
-        document.querySelector("body").style.cursor = "none"
-        const cursor = document.createElement('mdp-custom-cursor');
-        document.body.appendChild(cursor);
-        let deviceTypeMobile = checkDevice();
+  if (document.querySelector("body").hasAttribute("mdp-custom-cursor") === true) {
+    document.querySelector("body").style.cursor = "none"
+    const cursor = document.createElement('mdp-custom-cursor');
+    document.body.appendChild(cursor);
+    let deviceTypeMobile = checkDevice();
 
-        document.addEventListener('mousemove',
-            function (event) {
-                if (deviceTypeMobile === false) {
-                    cursor.style.visibility = "visible"
-                }
-                cursor.style.left = event.clientX - 15 + 'px';
-                cursor.style.top = event.clientY - 15 + 'px';
-            });
+    document.addEventListener('mousemove',
+      function (event) {
+        if (deviceTypeMobile === false) {
+          cursor.style.visibility = "visible"
+        }
+        cursor.style.left = event.clientX - 15 + 'px';
+        cursor.style.top = event.clientY - 15 + 'px';
+      });
 
-        const links = document.querySelectorAll('a, button, .cursor-link');
+    const links = document.querySelectorAll('a, button, .cursor-link');
 
-        links.forEach(link => {
-            link.addEventListener('mouseover', () => {
-                cursor.style.borderRadius = '15%';
-            });
+    links.forEach(link => {
+      link.addEventListener('mouseover', () => {
+        cursor.style.borderRadius = '15%';
+      });
 
-            link.addEventListener('mouseout', () => {
-                cursor.style.borderRadius = '50%';
-            });
-        });
+      link.addEventListener('mouseout', () => {
+        cursor.style.borderRadius = '50%';
+      });
+    });
 
-        const all = document.querySelectorAll('*');
-        all.forEach(element => {
-            element.style.cursor = "none"
-        });
-    }
+    const all = document.querySelectorAll('*');
+    all.forEach(element => {
+      element.style.cursor = "none"
+    });
+  }
 }
 
 function addLabelsToRadioInputs() {
-    const htmlContent = document.documentElement.innerHTML;
+  const htmlContent = document.documentElement.innerHTML;
 
-    const radioInputs = document.querySelectorAll('input[type="radio"][mdp-label]');
+  const radioInputs = document.querySelectorAll('input[type="radio"][mdp-label]');
 
-    radioInputs.forEach(input => {
-        let randomId;
-        do {
-            randomId = `mdp-randId-${generateRandomString(1)}`;
-        } while (htmlContent.includes(randomId));
+  radioInputs.forEach(input => {
+    let randomId;
+    do {
+      randomId = `mdp-randId-${generateRandomString(1)}`;
+    } while (htmlContent.includes(randomId));
 
-        input.id = randomId;
+    input.id = randomId;
 
-        const label = document.createElement('label');
-        label.setAttribute('for', randomId);
-        label.textContent = input.getAttribute('mdp-label');
+    const label = document.createElement('label');
+    label.setAttribute('for', randomId);
+    label.textContent = input.getAttribute('mdp-label');
 
-        input.parentNode.insertBefore(label, input.nextSibling);
-    });
+    input.parentNode.insertBefore(label, input.nextSibling);
+  });
 }
 
 function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
 }
 
 // Call the function to add labels
